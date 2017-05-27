@@ -4,8 +4,8 @@ import subprocess, datetime, sys, time, os
 from itertools import repeat
 
 emscripten_git_repo = 'https://github.com/kripken/emscripten/'
-docker_hub_repo = "trzeci/emscripten"
-minimum_version = "1.35.0"
+docker_hub_repo = "mdrolc/emscripten"
+minimum_version = "1.37.0"
 queue_file = "queue.txt"
 
 def is_version_at_least(ver, target):
@@ -149,7 +149,7 @@ def generate(builds, serverTags, autopush):
 
 		# test image by compiling sample.cpp
 		t_start = datetime.datetime.now()
-		if subprocess.call(["docker run -v $(pwd):/src " + build["docker_name"]+ " emcc test.cpp -o test.js && nodejs test.js"], shell=True):
+		if subprocess.call(["docker run -v $(pwd):/src " + build["docker_name"]+ " emcc test.cpp -o test.js && node test.js"], shell=True):
 			log("[ERROR] Testing {tag} failed".format(tag=build["docker_tag"]))
 			continue
 		log("[INFO] Compiling [{tag}] in: {time}".format(tag=build["docker_tag"], time=str(datetime.datetime.now() - t_start)))
